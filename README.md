@@ -30,57 +30,82 @@ This tutorial outlines the prerequisites and installation of the open-source hel
 
 <h2>Installation Steps</h2>
 
+1.
+ Log into the VM with Remote Desktop
 
+Within the VM (osticket-vm), download the osTicket-Installation-Files.zip and unzip it onto your desktop. 
 
-<p> 1.Set Up Your Windows 10 VM
-Begin by creating a Windows 10 VM with at least 2 virtual CPUs to ensure smooth operation. Ensure that Remote Desktop is enabled for easy access.
+2. 
+Install / Enable IIS in Windows WITH CGI
+World Wide Web Services -> Application Development Features -> [X] CGI
 
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+3. 
+From the “osTicket-Installation-Files” folder, install PHP Manager for IIS (PHPManagerForIIS_V1.5.0.msi)
 
-<p> 2. Install Internet Information Services (IIS)
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-<p>
-Enable IIS with CGI support:
+4.
+From the “osTicket-Installation-Files” folder install the Rewrite Module (rewrite_amd64_en-US.msi)
 
-Open Control Panel → Programs → Turn Windows features on or off.
+  5.
+Create the directory C:\PHP
 
-Check Internet Information Services.
+6.
+From the “osTicket-Installation-Files” folder, unzip PHP 7.3.8 (php-7.3.8-nts-Win32-VC15-x86.zip) into the “C:\PHP” folder
 
-Expand World Wide Web Services → Application Development Features, then check CGI.
+7.
+From the “osTicket-Installation-Files” folder, install VC_redist.x86.exe.
 
-Click OK to install
-</p>
-<br />
+8.
+From the “osTicket-Installation-Files” folder, install MySQL 5.5.62 (mysql-5.5.62-win32.msi)
+Typical Setup ->
+Launch Configuration Wizard (after install) ->
+Standard Configuration ->
+Username: ex.root
+Password:ex.root
+Open IIS as an Admin
 
-<p>3. Download and Install Required Components
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-<p>
-Using the Web Platform Installer:
+Register PHP from within IIS (PHP Manager -> C:\PHP\php-cgi.exe)
 
-Search for MySQL 5.5 and install.
+Reload IIS (Open IIS, Stop and Start the server)
 
-Search for PHP (versions up to 7.3) and install.
+Install osTicket v1.15.8
+From the “osTicket-Installation-Files” folder, unzip “osTicket-v1.15.8.zip” and copy the “upload” folder into “c:\inetpub\wwwroot”
+Within “c:\inetpub\wwwroot”, Rename “upload” to “osTicket”
 
-Install PHP Manager for IIS.
+Reload IIS (Open IIS, Stop and Start the server)
 
-Install the URL Rewrite Module.
+Go to sites -> Default -> osTicket
+On the right, click “Browse *:80”
 
-Install Microsoft Visual C++ Redistributable Package..
+Note that some extensions are not enabled
+Go back to IIS, sites -> Default -> osTicket
+Double-click PHP Manager
+Click “Enable or disable an extension”
+Enable: php_imap.dll
+Enable: php_intl.dll
+Enable: php_opcache.dll
+Refresh the osTicket site in your browser, observe the changes
 
-4. Configure PHP for IIS
+Rename: ost-config.php
+From: C:\inetpub\wwwroot\osTicket\include\ost-sampleconfig.php
+To: C:\inetpub\wwwroot\osTicket\include\ost-config.php
 
-Extract PHP (e.g., PHP 7.3.8) to C:\PHP.
+Assign Permissions: ost-config.php
+Disable inheritance -> Remove All
+New Permissions -> Everyone -> All
 
-In PHP Manager for IIS, register the PHP version.
+Continue Setting up osTicket in the browser (click Continue)
+Name Helpdesk
+Default email (receives email from customers)
 
-Configure PHP settings as needed
+From the “osTicket-Installation-Files” folder, install HeidiSQL.
+Open Heidi SQL
+Create a new session, root/root
+Connect to the session
+Create a database called “osTicket”
 
-5.Install osTicket
+Continue Setting up osTicket in the browser
+MySQL Database: osTicket
+MySQL Username: root
+MySQL Password: root
+Click “Install Now!”
 
-Download the latest osTicket version from the official website.
-
-Extract the contents to a folder (e.g., C:\inetpub\wwwroot\osticket).
-
-Rename include\ost-sampleconfig.php to include\ost-config.php.
